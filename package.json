@@ -1,0 +1,14 @@
+{
+  "name": "bitcoin-nodejs-playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "st3b1t",
+  "license": "GPL3",
+  "dependencies": {
+    "@fastify/websocket": "^10.0.1",
+    "bitcoinjs-lib": "^6.1.5",
+    "fastify": "^4.27.0",
+    "zeromq": "^5.3.1"
+  }
+}
