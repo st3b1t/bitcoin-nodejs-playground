@@ -1,35 +1,24 @@
 /**
+ * Copyright 2024 github.com/st3b1t license: GPL3
  * requirements:
  *  on bitcoin.conf enable this line:
  *  zmqpubrawtx=tcp://127.0.0.1:28332
- *
- *  npm install zeromq bitcoinjs-lib fastify @fastify/websocket
- *
- *  optionals:
- *  command line utility(part of bitcoin-core):
- *  bitcoin-tx
  */
-
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
-
 const zmq = require('zeromq');  //https://zeromq.github.io/zeromq.js/
 const bitcoin = require('bitcoinjs-lib');
-
 const logger = false;
 const fastify = require('fastify')({logger});
-fastify.register(require('@fastify/websocket'));
-
+const fastifyWs = require('@fastify/websocket');
 const EventEmitter = require('node:events');
 const eventEmitter = new EventEmitter();
 
+//configurations
 const USE_CLI = process.argv[2] === '--bitcoin-tx-cli';  //use bitcoin-tx command
-
 const {HOST='127.0.0.1', PORT=28332} = process.env;
-
 const zmqaddress = `tcp://${HOST}:${PORT}`
 const zmqsub = 'rawtx'
-
 const port = 8080;  //listen port for browser
 
 function hexToUtf8(hex) {
@@ -40,23 +29,18 @@ const classifyOutputScript = output => {
   const isOutput = paymentFn => {
     try {
       return paymentFn({output})
-    } catch (e) {
-    }
+    } catch (e) {}
   }
-
   if (isOutput(bitcoin.payments.p2pk)) return 'pubkey'
   else if (isOutput(bitcoin.payments.p2pkh)) return 'pubkeyhash'
   else if (isOutput(bitcoin.payments.p2ms)) return 'multisig'
   else if (isOutput(bitcoin.payments.p2wpkh)) return 'witnesspubkeyhash'
   else if (isOutput(bitcoin.payments.p2sh)) return 'scripthash'
   else if (isOutput(bitcoin.payments.embed)) return 'nulldata'
-
   return 'nonstandard'
 }
 
 async function decodeTx(rawTx) {
-    //const hexTx = rawTx.toString('hex');
-    //const tx = bitcoin.Transaction.fromHex(hexTx);
     const tx = bitcoin.Transaction.fromBuffer(rawTx);
     return {
       txid: tx.getId(),
@@ -80,28 +64,23 @@ async function decodeTx(rawTx) {
     };
 }
 
-//use Bitcoin bitcoin-tx to decode in JSON
 async function decodeTxCli(tx) {
     const hexTx = tx.toString('hex');
     const {stdout, stderr} = await exec(`bitcoin-tx -json ${hexTx}`)
     return JSON.parse(stdout.toString('utf8'));
 }
 
+//use bitcoinjs-lib or bitcoin-tx
 const decodeRawTx = USE_CLI ? decodeTxCli : decodeTx;
 
 console.log('Use:', USE_CLI ? 'bitcoin-tx' : 'bitcoinjs-lib' , 'to decode TXs')
 
-
-//SERVER
-const TT = {}
-
+fastify.register(fastifyWs);
 fastify.register(async function (fastify) {
   fastify.get('/stream', { websocket: true }, (sockws, req) => {
-
     eventEmitter.on('tx', msg => {
       sockws.send(msg);
     });
-
   });
 });
 
@@ -130,8 +109,10 @@ fastify.get('/', (req, res) => {
 
 const main = async () => {
 
+  const TT = {}
   const sockz = zmq.socket('sub');
   console.log(`ZMQ Connect: ${zmqaddress} Subscribe: ${zmqsub}...`);
+
   sockz
   .on('connect', function() {
     console.log('connected:', arguments)
@@ -143,24 +124,19 @@ const main = async () => {
       const rawTx = await decodeRawTx(message);
 
       rawTx.vout.forEach(vout => {
-          const {type} = vout.scriptPubKey
-              , hex = hexToUtf8(vout.scriptPubKey.hex)
+        const {type} = vout.scriptPubKey
+            , hex = hexToUtf8(vout.scriptPubKey.hex)
 
-          TT[type] = TT[type] ? TT[type]+1 : 1;
+        TT[type] = TT[type] ? TT[type]+1 : 1;
 
-          //if (type === 'nulldata') {  //only op_return timstamps
-            //console.log(`\nTXID:VOUT: ${rawTx.txid}:${vout.n}`)
-            //console.log('OP_RETURN: "', hex,'"')
-
-            //process.stdout.write(hex)
-
-            const msg = `TX: ${rawTx.txid}:${vout.n} TYPE: ${type}\nOP_RETURN: ${hex}\n`
-            console.log(msg)
-            eventEmitter.emit('tx', msg)
-          //}
-
+        //if (type === 'nulldata') {  //only op_return timstamps
+          const msg = `TX: ${rawTx.txid}:${vout.n} TYPE: ${type}\nOP_RETURN: ${hex}\n`
+          console.log(msg)
+          eventEmitter.emit('tx', msg)
+        //}
       });
   });
+
   process.on('SIGINT', () => {
     sockz.close();
     fastify.close()
@@ -169,7 +145,6 @@ const main = async () => {
 
   console.log(`Open Browser on http://localhost:${port}`)
   await fastify.listen({port});
-
 };
 
 main();
