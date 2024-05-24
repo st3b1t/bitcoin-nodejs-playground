@@ -110,13 +110,16 @@ fastify.get('/', (req, res) => {
   res.type('text/html').send(`
     <!DOCTYPE html>
     <html>
+    <head>
+      <meta charset="utf-8">
+    </head>
     <body>
       <textarea rows="20" cols="120"></textarea>
       <script>
         const ws = new WebSocket('ws://' + location.host + '/stream')
             , texta = document.getElementsByTagName('textarea')[0];
-        ws.onmessage = function(event) {
-          texta.value += event.data;
+        ws.onmessage = function(e) {
+          texta.value += e.data;
           texta.scrollTop = texta.scrollHeight;
         };
       </script>
