@@ -147,7 +147,7 @@ const main = async () => {
 
             //process.stdout.write(hex)
 
-            const msg = `${rawTx.txid}:${vout.n} ${type}\n${hex}\n`
+            const msg = `TX: ${rawTx.txid}:${vout.n} TYPE: ${type}\nOP_RETURN: ${hex}\n`
             console.log(msg)
             eventEmitter.emit('tx', msg)
           //}
