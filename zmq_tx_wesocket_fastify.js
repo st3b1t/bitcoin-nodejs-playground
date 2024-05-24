@@ -13,7 +13,7 @@
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
-const zmq = require('zeromq');
+const zmq = require('zeromq');  //https://zeromq.github.io/zeromq.js/
 const bitcoin = require('bitcoinjs-lib');
 
 const logger = false;
@@ -24,10 +24,13 @@ const EventEmitter = require('node:events');
 const eventEmitter = new EventEmitter();
 
 const USE_CLI = process.argv[2] === '--bitcoin-tx-cli';  //use bitcoin-tx command
+
 const {HOST='127.0.0.1', PORT=28332} = process.env;
 
 const zmqaddress = `tcp://${HOST}:${PORT}`
 const zmqsub = 'rawtx'
+
+const port = 8080;  //listen port for browser
 
 function hexToUtf8(hex) {
     return Buffer.from(hex,'hex').toString('utf8');
@@ -124,11 +127,12 @@ fastify.get('/', (req, res) => {
 
 const main = async () => {
 
-  await fastify.listen({ port: 8080 });
-
   const sockz = zmq.socket('sub');
   console.log(`ZMQ Connect: ${zmqaddress} Subscribe: ${zmqsub}...`);
   sockz
+  .on('connect', function() {
+    console.log('connected:', arguments)
+  })
   .connect(zmqaddress)
   .subscribe(zmqsub)
   .on('message', async (topic, message) => {
@@ -141,7 +145,7 @@ const main = async () => {
 
           TT[type] = TT[type] ? TT[type]+1 : 1;
 
-          //if (type === 'nulldata') {
+          //if (type === 'nulldata') {  //only op_return timstamps
             //console.log(`\nTXID:VOUT: ${rawTx.txid}:${vout.n}`)
             //console.log('OP_RETURN: "', hex,'"')
 
@@ -159,6 +163,10 @@ const main = async () => {
     fastify.close()
     process.exit(0);
   });
+
+  console.log(`Open Browser on http://localhost:${port}`)
+  await fastify.listen({port});
+
 };
 
 main();
