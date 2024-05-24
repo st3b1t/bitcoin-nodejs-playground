@@ -1,8 +1,6 @@
 # Bitcoin Nodejs Playground
 
-
-
-## Stream Transactions and OP_RETURN
+## 1. Stream Transactions and OP_RETURN
 
 Stream in the browser via WebSocket any transaction and OP_RETURN of your Bitcoin Full Node
 Server side written in NodeJs [Fastify](https://github.com/fastify) and [BitcoinJs-lib](https://github.com/bitcoinjs/bitcoinjs-lib)
@@ -29,3 +27,9 @@ $ node zmq_tx_ws_fastify.js
 ```
 
 ![](images/zmq_tx_wesocket_fastify.gif)
+
+
+Donate ❤️ sats via LN ⚡ to incentivize work of my repos
+
+[![image](https://raw.githubusercontent.com/st3b1t/st3b1t/main/donate.png)](https://getalby.com/p/st3b1t)
+
