@@ -17,3 +17,7 @@ $ node zmq_tx_ws_fastify.js
 ```
 
 ![](zmq_tx_wesocket_fastify.gif)
+
+Donations ❤️ via Lightning Network ⚡ to incentivize development and bug fixes of my repos
+
+[![image](./donate.png)](https://getalby.com/p/st3b1t)
