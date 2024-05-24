@@ -20,4 +20,4 @@ $ node zmq_tx_ws_fastify.js
 
 Donations ❤️ via Lightning Network ⚡ to incentivize development and bug fixes of my repos
 
-[![image](./donate.png)](https://getalby.com/p/st3b1t)
+[![image](https://raw.githubusercontent.com/st3b1t/st3b1t/main/donate.png)](https://getalby.com/p/st3b1t)
