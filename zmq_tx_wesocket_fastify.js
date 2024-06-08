@@ -114,8 +114,11 @@ const main = async () => {
   console.log(`ZMQ Connect: ${zmqaddress} Subscribe: ${zmqsub}...`);
 
   sockz
-  .on('connect', function() {
-    console.log('connected:', arguments)
+  .on('connected', function() {
+    console.log('ZMQ connected:', arguments)
+  })
+  .on('error', async err => {
+    console.log('ZMQ error', err)
   })
   .connect(zmqaddress)
   .subscribe(zmqsub)
