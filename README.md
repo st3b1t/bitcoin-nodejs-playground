@@ -28,8 +28,17 @@ $ node zmq_tx_websocket_fastify.js
 
 ![](images/zmq_tx_wesocket_fastify.gif)
 
+---
 
-Donate ❤️ sats via LN ⚡ to incentivize work of my repos
+## 2. Proof Of Work
+
+```bash
+$ node proofofwork.js
+```
+
+![](images/proofofwork.gif)
+
+# Donate ❤️ sats via LN ⚡ to incentivize work of this repository
 
 [![image](https://raw.githubusercontent.com/st3b1t/st3b1t/main/donate.png)](https://getalby.com/p/st3b1t)
 
