@@ -38,6 +38,16 @@ $ node proofofwork.js
 
 ![](images/proofofwork.gif)
 
+## 3. Proof Of Work Binary comparison
+
+The hash comparison occurs at the binary level, allows greater granularity of target diffucilty
+
+```bash
+$ node proofofwork_bonary.js
+```
+
+![](images/proofofwork_binary.gif)
+
 # Donate ❤️ sats via LN ⚡ to incentivize work of this repository
 
 [![image](https://raw.githubusercontent.com/st3b1t/st3b1t/main/donate.png)](https://getalby.com/p/st3b1t)
