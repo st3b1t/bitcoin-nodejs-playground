@@ -1,5 +1,8 @@
 # Bitcoin Nodejs Playground
 
+This repository contains small experiments with a series of scripts that implement in a few lines some of the workings of Bitcoin or show and process some of the data structures of the blockchain for greater understanding.
+
+
 ## 1. Stream Transactions and OP_RETURN
 
 Stream in the browser via WebSocket any transaction and OP_RETURN of your Bitcoin Full Node from [ZeroMQ](https://github.com/zeromq/zeromq.js/) interface
