@@ -46,7 +46,7 @@ $ node proofofwork.js
 The hash comparison occurs at the binary level, allows greater granularity of target diffucilty
 
 ```bash
-$ node proofofwork_bonary.js
+$ node proofofwork_binary.js
 ```
 
 ![](images/proofofwork_binary.gif)
