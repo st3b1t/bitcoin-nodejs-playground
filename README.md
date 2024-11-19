@@ -1,5 +1,8 @@
 # Bitcoin Nodejs Playground
 
+This repository contains small experiments with a series of scripts that implement in a few lines some of the workings of Bitcoin or show and process some of the data structures of the blockchain for greater understanding.
+
+
 ## 1. Stream Transactions and OP_RETURN
 
 Stream in the browser via WebSocket any transaction and OP_RETURN of your Bitcoin Full Node from [ZeroMQ](https://github.com/zeromq/zeromq.js/) interface
@@ -7,9 +10,10 @@ Server side written in NodeJs [Fastify](https://github.com/fastify) and [Bitcoin
 
 ### Requirements:
 Add in `bitcoin.conf` enable this line:
-zmqpubrawtx=tcp://127.0.0.1:28332
 
-npm install zeromq bitcoinjs-lib fastify @fastify/websocket
+`zmqpubrawtx=tcp://127.0.0.1:28332`
+
+npm dependecies: zeromq bitcoinjs-lib fastify @fastify/websocket
 
 ```bash
 $ npm install
@@ -25,6 +29,8 @@ specify HOST of Bitcoin and ZeroMQ port
 $ export HOST=127.0.0.1 PORT=28332
 $ node zmq_tx_websocket_fastify.js
 ```
+
+show in the browser at http://localhost:8080/
 
 ![](images/zmq_tx_wesocket_fastify.gif)
 
@@ -43,7 +49,7 @@ $ node proofofwork.js
 The hash comparison occurs at the binary level, allows greater granularity of target diffucilty
 
 ```bash
-$ node proofofwork_bonary.js
+$ node proofofwork_binary.js
 ```
 
 ![](images/proofofwork_binary.gif)
