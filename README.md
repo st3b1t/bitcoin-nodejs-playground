@@ -10,9 +10,12 @@ Server side written in NodeJs [Fastify](https://github.com/fastify) and [Bitcoin
 
 ### Requirements:
 Add in `bitcoin.conf` enable this line:
-zmqpubrawtx=tcp://127.0.0.1:28332
 
-npm install zeromq bitcoinjs-lib fastify @fastify/websocket
+`zmqpubrawtx=tcp://127.0.0.1:28332`
+
+install dependecies:
+
+`npm install zeromq bitcoinjs-lib fastify @fastify/websocket`
 
 ```bash
 $ npm install
