@@ -30,6 +30,8 @@ $ export HOST=127.0.0.1 PORT=28332
 $ node zmq_tx_websocket_fastify.js
 ```
 
+sho in the browser at `http://localhost:8080`
+
 ![](images/zmq_tx_wesocket_fastify.gif)
 
 ---
