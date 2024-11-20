@@ -16,7 +16,7 @@ const eventEmitter = new EventEmitter();
 
 //configurations
 const USE_CLI = process.argv[2] === '--bitcoin-tx-cli';  //use bitcoin-tx command
-const {HOST='127.0.0.1', PORT=28332} = process.env;
+const {HOST='127.0.0.1', PORT=28332, LOGGING=false} = process.env;
 const zmqaddress = `tcp://${HOST}:${PORT}`
 const zmqsub = 'rawtx'
 const port = 8080;  //listen port for browser
@@ -91,6 +91,24 @@ fastify.get('/', (req, res) => {
     <html>
     <head>
       <meta charset="utf-8">
+      <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      textarea {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box; /* Include padding e bordo nelle dimensioni */
+      border: none;
+      resize: none;
+      background: #000;
+      color:#0f0
+    }
+    </style>
     </head>
     <body>
       <textarea rows="20" cols="120"></textarea>
@@ -133,8 +151,10 @@ const main = async () => {
         TT[type] = TT[type] ? TT[type]+1 : 1;
 
         //if (type === 'nulldata') {  //only op_return timstamps
-          const msg = `TX: ${rawTx.txid}:${vout.n} TYPE: ${type}\nOP_RETURN: ${hex}\n`
-          console.log(msg)
+          const msg = `TX: ${rawTx.txid}:${vout.n} TYPE: ${type}\nOP_RETURN: ${hex}\n\n`
+          if (!!LOGGING) {
+            console.log(msg)
+          }
           eventEmitter.emit('tx', msg)
         //}
       });
@@ -147,7 +167,7 @@ const main = async () => {
   });
 
   console.log(`Open Browser on http://localhost:${port}`)
-  await fastify.listen({port});
+  await fastify.listen({port, host:'0.0.0.0'});
 };
 
 main();
